@@ -94,6 +94,7 @@
 							for (i = 0; i < courseInfoCallbacks[id].length; i++) {
 								courseInfoCallbacks[id][i](courseInfo);
 							}
+							courseInfoCallbacks.splice(id, 1);
 						}
 					}
 				}
@@ -141,6 +142,11 @@
 		directbookmark.appendChild(directbookmarkimage);
 
 		text.parentNode.insertBefore(directbookmark, text.nextSibling);
+		if (bookmarkButtonDict[courseInfo.id] === undefined) {
+			bookmarkButtonDict[courseInfo.id] = [];
+		}
+		bookmarkButtonDict[courseInfo.id].push(directbookmark);
+
 	}
 
 	function setBookmark(id, token, button) {
@@ -149,11 +155,13 @@
 		request.onreadystatechange = function() {
 			if (request.readyState == XMLHttpRequest.DONE) {
 				if (request.status == 200) {
-					button.setAttribute('src', imageUnbookmark);
-					button.parentElement.onclick = function(event) {
-						unsetBookmark(id, token, event.target);
-						return false;
-					};
+					for (var i = 0; i < bookmarkButtonDict[id].length; i++) {
+						bookmarkButtonDict[id][i].firstChild.setAttribute('src', imageUnbookmark);
+						bookmarkButtonDict[id][i].onclick = function(event) {
+							unsetBookmark(id, token, event.target);
+							return false;
+						};
+					}
 				}
 				else {
 					alert("Error. Please make sure that you are logged in on supermariomakerbookmark.nintendo.net");
@@ -167,7 +175,9 @@
 		request.setRequestHeader("X-CSRF-Token", token);
 		request.setRequestHeader("Referer", "https://supermariomakerbookmark.nintendo.net/courses/"+id);
 		request.withCredentials = true;
-		button.setAttribute('src', imageLoading);
+		for (var i = 0; i < bookmarkButtonDict[id].length; i++) {
+			 bookmarkButtonDict[id][i].firstChild.setAttribute('src', imageLoading);
+		}
 		request.send();
 	}
 
@@ -177,11 +187,13 @@
 		request.onreadystatechange = function() {
 			if (request.readyState == XMLHttpRequest.DONE) {
 				if (request.status == 200) {
-					button.setAttribute('src', imageBookmark);
-					button.parentElement.onclick = function(event) {
-						setBookmark(id, token, event.target);
-						return false;
-					};
+					for (var i = 0; i < bookmarkButtonDict[id].length; i++) {
+						bookmarkButtonDict[id][i].firstChild.setAttribute('src', imageBookmark);
+						bookmarkButtonDict[id][i].onclick = function(event) {
+							setBookmark(id, token, event.target);
+							return false;
+						};
+					}
 				}
 				else {
 					alert("Error. Please make sure that you are logged in on supermariomakerbookmark.nintendo.net");
@@ -195,7 +207,9 @@
 		request.setRequestHeader("X-CSRF-Token", token);
 		request.setRequestHeader("Referer", "https://supermariomakerbookmark.nintendo.net/courses/"+id);
 		request.withCredentials = true;
-		button.setAttribute('src', imageLoading);
+		for (var i = 0; i < bookmarkButtonDict[id].length; i++) {
+			 bookmarkButtonDict[id][i].firstChild.setAttribute('src', imageLoading);
+		}
 		request.send();
 	}
 
@@ -230,6 +244,7 @@
 
 	var courseInfoCache = [];
 	var courseInfoCallbacks = [];
+	var bookmarkButtonDict = [];
 
 	searchInElement(document.body);
 
