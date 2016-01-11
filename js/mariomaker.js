@@ -123,15 +123,15 @@
 		var directbookmark = document.createElement('a');
 		directbookmark.href = "";
 		if (courseInfo.isBookmarked) {
-			directbookmark.onclick = function(event) {
-				setBookmark(courseInfo.id, courseInfo.token, event.target);
+			directbookmark.onclick = function() {
+				setBookmark(courseInfo.id, courseInfo.token);
 				return false;
 			};
 			imageSrc = imageBookmark;
 		}
 		else {
-			directbookmark.onclick = function(event) {
-				unsetBookmark(courseInfo.id, courseInfo.token, event.target);
+			directbookmark.onclick = function() {
+				unsetBookmark(courseInfo.id, courseInfo.token);
 				return false;
 			};
 			imageSrc = imageUnbookmark;
@@ -149,7 +149,7 @@
 
 	}
 
-	function setBookmark(id, token, button) {
+	function setBookmark(id, token) {
 		var request = new XMLHttpRequest();
 
 		request.onreadystatechange = function() {
@@ -157,8 +157,8 @@
 				if (request.status == 200) {
 					for (var i = 0; i < bookmarkButtonDict[id].length; i++) {
 						bookmarkButtonDict[id][i].firstChild.setAttribute('src', imageUnbookmark);
-						bookmarkButtonDict[id][i].onclick = function(event) {
-							unsetBookmark(id, token, event.target);
+						bookmarkButtonDict[id][i].onclick = function() {
+							unsetBookmark(id, token);
 							return false;
 						};
 					}
@@ -181,7 +181,7 @@
 		request.send();
 	}
 
-	function unsetBookmark(id, token, button) {
+	function unsetBookmark(id, token) {
 		var request = new XMLHttpRequest();
 
 		request.onreadystatechange = function() {
@@ -189,8 +189,8 @@
 				if (request.status == 200) {
 					for (var i = 0; i < bookmarkButtonDict[id].length; i++) {
 						bookmarkButtonDict[id][i].firstChild.setAttribute('src', imageBookmark);
-						bookmarkButtonDict[id][i].onclick = function(event) {
-							setBookmark(id, token, event.target);
+						bookmarkButtonDict[id][i].onclick = function() {
+							setBookmark(id, token);
 							return false;
 						};
 					}
