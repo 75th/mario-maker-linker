@@ -157,6 +157,12 @@
 				}
 				else {
 					alert("Error. Please make sure that you are logged in on supermariomakerbookmark.nintendo.net");
+					button.setAttribute('src', imageBookmark);
+					button.parentElement.onclick = function(event) {
+						setBookmark(id, token, event.target);
+						return false;
+					};
+
 				}
 			}
 		};
@@ -168,6 +174,7 @@
 		request.setRequestHeader("Referer", "https://supermariomakerbookmark.nintendo.net/courses/"+id);
 		request.withCredentials = true;
 		button.setAttribute('src', imageLoading);
+		button.parentElement.onclick = doNothing;
 		request.send();
 	}
 
@@ -185,6 +192,12 @@
 				}
 				else {
 					alert("Error. Please make sure that you are logged in on supermariomakerbookmark.nintendo.net");
+					button.setAttribute('src', imageUnBookmark);
+					button.parentElement.onclick = function(event) {
+						unsetBookmark(id, token, event.target);
+						return false;
+					};
+
 				}
 			}
 		};
@@ -196,7 +209,12 @@
 		request.setRequestHeader("Referer", "https://supermariomakerbookmark.nintendo.net/courses/"+id);
 		request.withCredentials = true;
 		button.setAttribute('src', imageLoading);
+		button.parentElement.onclick = doNothing;
 		request.send();
+	}
+
+	function doNothing() { //What? This way I don't have to recreate the function all the time.
+		return false;
 	}
 
 	function onDOMChange(mutations) {
